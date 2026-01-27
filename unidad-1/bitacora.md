@@ -124,9 +124,92 @@ Esperaba poder crear un salto que cambiara una de las lineas emergentes del ruid
 
 ## Bitácora de aplicación 
 
+### Actividad 7 
 
+Obra generativa: Es una obra de arte creada a partir de ciertos sistemas o reglas establecidas por la persona, las cuales la maquina debe de seguir para crear un resultado fuera del control directo del artista. En otras palabras el artista le pone limites a la mauqina quien dentro de estos limites genera resultados aleatorios. 
+
+https://editor.p5js.org/SaloTB/sketches/AFPNtjjs1
+
+<img width="638" height="238" alt="image" src="https://github.com/user-attachments/assets/664c2f4b-9e25-453d-8082-4d08255f4c70" />
+
+
+            let walker;
+            
+            function setup() {
+              createCanvas(640, 240);
+              walker = new Walker();
+              background(255);
+            }
+            
+            function crazy(){
+              let x = randomGaussian(320, 100);
+              let y = randomGaussian(120, 100);
+              let a = randomGaussian(220, 100);
+              noStroke();
+              fill(155, a, 200)
+              circle(x, y, 16); 
+               
+            }
+            
+            function crazy1(){
+              let x = randomGaussian(320, 30);
+              let y = randomGaussian(100, 30);
+              let a = randomGaussian(220, 100);
+              noStroke();
+              fill(255, a, 200)
+              circle(x, y, 16); 
+              walker.step();
+              walker.show(); 
+            }
+            
+            function draw() { 
+              let a = randomGaussian(220, 100);
+              fill(255, a, 200)
+            }
+            
+            class Walker {
+              constructor() {
+                this.x = width / 2;
+                this.y = height / 2;
+              }
+            
+              show() {
+                stroke(0);
+                square(this.x, this.y, 20);
+              }
+            
+              step() {
+             let r = random(1);
+            if (r < 0.01) {
+              this.x += random(-100, 100);
+              this.y += random(-100, 100);
+            } else {
+              this.x += random(-1, 1);
+              this.y += random(-1, 1);
+            }
+             }
+              }
+            
+            function mouseDragged() {
+              if (mouseX < 50) { setup();
+              } else if (mouseY > 50)  { crazy1()
+              }
+              else {crazy();}
+            
+            }
 
 ## Bitácora de reflexión
 
+### Actividad 8 
+
+#### Diferencias de Random() y Noise: 
+
+#### Distribucion de porbabilidad, uniforme y normal:
+
+#### La aleatoriedad en el arte generativo: (Poner al menos dos funciones) 
+
+#### Obra de aleatoriedad actividad 7:
+
+#### Caminata y salto de levý: 
 
 
