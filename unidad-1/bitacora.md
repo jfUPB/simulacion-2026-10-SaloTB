@@ -126,7 +126,7 @@ Esperaba poder crear un salto que cambiara una de las lineas emergentes del ruid
 
 ### Actividad 7 
 
-Es una obra generativa que muestra una expansion de puntos de forma normal y uniforme que contrastan la una con la otra atravez de los colores, más un elemento cuadrado que contrasta en forma con el resto y esta realizando una caminata con saltos de levý para evitar el aburrimiento visual. La interactividad del maus es arrastarando y depende de donde esté para que el usuario pueda descubrir que movimeintos causan que cosa y juegue ocn ello. 
+Es una obra generativa que muestra una expansion de puntos de forma normal y uniforme que contrastan la una con la otra atravez de los colores (con un random gausian se logra que el color dentro de cada una de las funciones tambien varie ligeramente), más un elemento cuadrado que contrasta en forma con el resto y esta realizando una caminata con saltos de levý para evitar el aburrimiento visual. La interactividad del mause es arrastarando, y depende de donde esté para que el usuario pueda descubrir que movimeintos causan que cosa y juegue con ello. 
 
 https://editor.p5js.org/SaloTB/sketches/AFPNtjjs1
 
@@ -230,5 +230,6 @@ Utilice una distribucion normal y una distribucion uniforme, haciendo que constr
 La caminata es un proceso de repeticion que tiene en cuenta la posicion anterior para detemrinar la posicion que sigue de forma aleatoria. 
 
 El salto de levý combina pasos pequeños como en al caminata, pero despues da saltos muy largos (los cuales tienen una probabilidad mucho menor de ocurrir)
+
 
 
