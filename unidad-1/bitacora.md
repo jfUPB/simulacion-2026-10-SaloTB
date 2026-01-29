@@ -204,12 +204,30 @@ https://editor.p5js.org/SaloTB/sketches/AFPNtjjs1
 
 #### Diferencias de Random() y Noise: 
 
+random(): Genera numeros completamente aleatorios sin valores consecutivos. Cada llamada es independiente de las anteriores. (Es más acotico). Se usaria para situaciones más aleatorias, como estrellas que titilan en el cielo.
+
+noise() (Ruido Perlin): Genera secuencias que no son completamente aleatorias, son más orgánicas. Los valores cercanos producen otros valores similares (Sigue un patron a partir de la correlación). Se usa para movimeintos más organicos, como el ejemplo de la onda. 
+
 #### Distribucion de porbabilidad, uniforme y normal:
+
+La distribución de porbabilidad es una ecuación matematica que da a una variable un valor aleatorio. 
+
+Distribucion uniforme: es la que da una amplitud más grande, no hay un punto de concentración.
+
+Distribución normal: es en la que hay un punto de concentración, que es el punto donde es normal que todos aparezcan. (Campana de gaus) 
 
 #### La aleatoriedad en el arte generativo: (Poner al menos dos funciones) 
 
+1. Unicidad: Cada vez que se corre el programa se creara una version diferente de la misma obra, ninguna sera igual a la anterior.
+2. Organico: Hace que el proceso se vea más organico a partir de sus variaciones e "imperfecciones"
+
 #### Obra de aleatoriedad actividad 7:
+
+Utilice una distribucion normal y una distribucion uniforme, haciendo que constrastace con gamas de colores diferentes, lo que queria lograr era un constraste y una especie de caos controlado. Ademas de eso añadi un objeto como un walker que de vez en cuando da saltos de levy para evitar lo montono de los conceptos anteriores. Asi el usuario sabe que si interactua en un lugar pasara algo concreto, pero tambien hay cierta sensación de insertidumbre.
 
 #### Caminata y salto de levý: 
 
+La caminata es un proceso de repeticion que tiene en cuenta la posicion anterior para detemrinar la posicion que sigue de forma aleatoria. 
+
+El salto de levý combina pasos pequeños como en al caminata, pero despues da saltos muy largos (los cuales tienen una probabilidad mucho menor de ocurrir)
 
