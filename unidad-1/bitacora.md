@@ -126,7 +126,7 @@ Esperaba poder crear un salto que cambiara una de las lineas emergentes del ruid
 
 ### Actividad 7 
 
-Obra generativa: Es una obra de arte creada a partir de ciertos sistemas o reglas establecidas por la persona, las cuales la maquina debe de seguir para crear un resultado fuera del control directo del artista. En otras palabras el artista le pone limites a la mauqina quien dentro de estos limites genera resultados aleatorios. 
+Es una obra generativa que muestra una expansion de puntos de forma normal y uniforme que contrastan la una con la otra atravez de los colores, más un elemento cuadrado que contrasta en forma con el resto y esta realizando una caminata con saltos de levý para evitar el aburrimiento visual. La interactividad del maus es arrastarando y depende de donde esté para que el usuario pueda descubrir que movimeintos causan que cosa y juegue ocn ello. 
 
 https://editor.p5js.org/SaloTB/sketches/AFPNtjjs1
 
@@ -230,4 +230,5 @@ Utilice una distribucion normal y una distribucion uniforme, haciendo que constr
 La caminata es un proceso de repeticion que tiene en cuenta la posicion anterior para detemrinar la posicion que sigue de forma aleatoria. 
 
 El salto de levý combina pasos pequeños como en al caminata, pero despues da saltos muy largos (los cuales tienen una probabilidad mucho menor de ocurrir)
+
 
