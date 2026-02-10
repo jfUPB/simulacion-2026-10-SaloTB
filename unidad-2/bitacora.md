@@ -111,9 +111,88 @@ Aceleración hacia el mause:
 
 ## Bitácora de aplicación 
 
+### Actividad 9
+
+1. Esta obra es una esfera que funciona como un vector al que el usuario, utilizando las flechas dle teclado, le puede alterar tanto la magnitud como la dirección. Se juega en escenacia ocn la acelración que cmabia la velocidad y la velocidad que cmabia la posicion. Y se evidencia este cambio a partir del tamaño y los colores del objeto, que en este caso funciona como un pincel en constante movimeinto que el usuario puede manipular para pintar el canvas de formas unicas. 
+
+<img width="939" height="807" alt="image" src="https://github.com/user-attachments/assets/84abd092-31a2-4123-9f9f-0b3c3b2d727c" />
 
 
+    // Obra generativa interactiva
+    // El objeto pinta el canvas. Usa las flechas del teclado.
+    
+    let position;
+    let velocity;
+    let angle = 0;      // dirección del vector
+    let magnitude = 2;  // magnitud del vector
+    
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+      background(10);
+      colorMode(HSB, 360, 100, 100, 100);
+    
+      position = createVector(width / 2, height / 2);
+      // Inicializamos la velocidad
+      velocity = p5.Vector.fromAngle(angle);
+      velocity.setMag(magnitude);
+    }
+    
+    function draw() {
+      // Actualizamos la velocidad en cada frame por si angle o magnitude cambiaron
+      velocity = p5.Vector.fromAngle(angle);
+      velocity.setMag(magnitude);
+    
+      // Movimiento
+      position.add(velocity);
+    
+      // Rebote en bordes
+      if (position.x < 0 || position.x > width) {
+        angle = PI - angle; // Refleja el ángulo horizontalmente
+      }
+      if (position.y < 0 || position.y > height) {
+        angle = -angle;     // Refleja el ángulo verticalmente
+      }
+    
+      // Color depende de la dirección (normalizamos el ángulo para el tono)
+      // Usamos angle % TWO_PI para mantenerlo en el rango de color
+      let hue = map(angle % TWO_PI, -PI, PI, 0, 360);
+      if (hue < 0) hue += 360; 
+    
+      stroke(hue, 80, 100, 40);
+      fill(2,2,2);
+    
+      // Tamaño depende de la magnitud
+      let brushSize = map(magnitude, 0.5, 10, 4, 60);
+    
+      // Dibujo del trazo
+      ellipse(position.x, position.y, brushSize, brushSize);
+    }
+    
+    function keyPressed() {
+      // Cambiar magnitud (↑ ↓)
+      if (keyCode === UP_ARROW) {
+        magnitude += 0.5;
+      } else if (keyCode === DOWN_ARROW) {
+        magnitude -= 0.5;
+      }
+      
+      // Limitar la velocidad para que no se detenga ni vuele
+      magnitude = constrain(magnitude, 0.5, 15);
+    
+      // Cambiar dirección (← →)
+      if (keyCode === LEFT_ARROW) {
+        angle -= 0.2;
+      } else if (keyCode === RIGHT_ARROW) {
+        angle += 0.2;
+      }
+    
+      // Importante: return false al FINAL para evitar scroll del navegador
+      return false;
+    }   
 
+
+https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8 
 
 ## Bitácora de reflexión
+
 
