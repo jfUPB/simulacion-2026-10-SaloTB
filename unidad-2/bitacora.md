@@ -169,7 +169,7 @@ Aceleración hacia el mause:
     }
     
     function keyPressed() {
-      // Cambiar magnitud (↑ ↓)
+      // Cambiar magnitud 
       if (keyCode === UP_ARROW) {
         magnitude += 0.5;
       } else if (keyCode === DOWN_ARROW) {
@@ -179,7 +179,7 @@ Aceleración hacia el mause:
       // Limitar la velocidad para que no se detenga ni vuele
       magnitude = constrain(magnitude, 0.5, 15);
     
-      // Cambiar dirección (← →)
+      // Cambiar dirección 
       if (keyCode === LEFT_ARROW) {
         angle -= 0.2;
       } else if (keyCode === RIGHT_ARROW) {
@@ -194,5 +194,6 @@ Aceleración hacia el mause:
 https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8 
 
 ## Bitácora de reflexión
+
 
 
