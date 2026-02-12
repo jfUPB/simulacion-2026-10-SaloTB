@@ -195,5 +195,122 @@ https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8
 
 ## Bitácora de reflexión
 
+### Actividad 10 
+
+1. Mi obra generativa es una simulación de "particle life" donde cada una de los peuqeños puntos tiene una atracción y una repulsión diferente con otros puntos dependiendo de su color (esto lso incluye a ellos mismos).
+
+<img width="908" height="835" alt="image" src="https://github.com/user-attachments/assets/404dfda8-7ea5-4f5e-8b28-6198afe5e70d" />
+
+    let particles = [];
+    const numParticles = 100; // Cantidad por cada color
+    
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+      
+      // Crear partículas de forma aleatoria
+      for (let i = 0; i < numParticles; i++) {
+        particles.push(new Particle('purple', color(160, 32, 240)));
+        particles.push(new Particle('blue', color(0, 100, 255)));
+        particles.push(new Particle('green', color(50, 255, 50)));
+      }
+    }
+    
+    function draw() {
+      background(10);
+    
+      for (let p of particles) {
+        // Aplicar las reglas de interacción
+        p.applyBehaviors(particles);
+        // Motion 101
+        p.update();
+        p.edges();
+        p.display();
+      }
+    }
+    
+    class Particle {
+      constructor(type, col) {
+        this.pos = createVector(random(width), random(height));
+        this.vel = createVector(0, 0);
+        this.acc = createVector(0, 0);
+        this.type = type;
+        this.color = col;
+        this.maxSpeed = 3;
+        this.friction = 0.95; // Para que no sea un caos total
+      }
+    
+      // Lógica de Motion 101: La aceleración cambia velocidad, la velocidad cambia posición
+      update() {
+        this.vel.add(this.acc);
+        this.vel.limit(this.maxSpeed);
+        this.pos.add(this.vel);
+        
+        // Limpiamos la aceleración en cada frame 
+        this.acc.mult(0);
+        // Aplicamos fricción constante
+        this.vel.mult(this.friction);
+      }
+    
+      // Aplicar una fuerza (F = M * A, como la masa es 1, la fuerza es la aceleración)
+      applyForce(force) {
+        this.acc.add(force);
+      }
+    
+      applyBehaviors(others) {
+        for (let other of others) {
+          if (other === this) continue;
+    
+          let force = p5.Vector.sub(other.pos, this.pos);
+          let d = force.mag();
+    
+          if (d > 0 && d < 200) { // Radio de influencia
+            force.normalize();
+            let strength = 0;
+    
+            // REGLAS
+            
+            // MORADOS: Atracción a Verdes y Azules. Repelen a sí mismos.
+            if (this.type === 'purple') {
+              if (other.type === 'green' || other.type === 'blue') strength = 0.5;
+              if (other.type === 'purple') strength = -0.5;
+            }
+    
+            // AZULES: Repelidos por Morados. Atraídos por el resto (Azul y Verde).
+            if (this.type === 'blue') {
+              if (other.type === 'purple') strength = -0.7;
+              if (other.type === 'green' || other.type === 'blue') strength = 0.4;
+            }
+    
+            // VERDES: Repelidos por todo. Atraídos por sí mismos.
+            if (this.type === 'green') {
+              if (other.type === 'purple' || other.type === 'blue') strength = -0.8;
+              if (other.type === 'green') strength = 0.6;
+            }
+    
+            // Si están demasiado cerca, siempre se repelen un poco (colisión física básica)
+            if (d < 30) strength = -2;
+    
+            force.mult(strength);
+            this.applyForce(force);
+          }
+        }
+      }
+    
+      edges() {
+        // Rebote simple en los bordes
+        if (this.pos.x < 0 || this.pos.x > width) this.vel.x *= -1;
+        if (this.pos.y < 0 || this.pos.y > height) this.vel.y *= -1;
+        this.pos.x = constrain(this.pos.x, 0, width);
+        this.pos.y = constrain(this.pos.y, 0, height);
+      }
+    
+      display() {
+        strokeWeight(5);
+        stroke(this.color);
+        point(this.pos.x, this.pos.y);
+      }
+    }
+
+https://editor.p5js.org/SaloTB/sketches/I21pnywBY 
 
 
