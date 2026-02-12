@@ -117,7 +117,7 @@ Aceleración hacia el mause:
 
 <img width="939" height="807" alt="image" src="https://github.com/user-attachments/assets/84abd092-31a2-4123-9f9f-0b3c3b2d727c" />
 
-
+```js
     // Obra generativa interactiva
     // El objeto pinta el canvas. Usa las flechas del teclado.
     
@@ -189,7 +189,7 @@ Aceleración hacia el mause:
       // Importante: return false al FINAL para evitar scroll del navegador
       return false;
     }   
-
+```
 
 https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8 
 
@@ -201,6 +201,7 @@ https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8
 
 <img width="908" height="835" alt="image" src="https://github.com/user-attachments/assets/404dfda8-7ea5-4f5e-8b28-6198afe5e70d" />
 
+```js
     let particles = [];
     const numParticles = 100; // Cantidad por cada color
     
@@ -311,6 +312,9 @@ https://editor.p5js.org/SaloTB/sketches/Mc0l0F1o8
       }
     }
 
-https://editor.p5js.org/SaloTB/sketches/I21pnywBY 
+```
+
+[Enlace a la simulación](https://editor.p5js.org/SaloTB/sketches/I21pnywBY) 
+
 
 
