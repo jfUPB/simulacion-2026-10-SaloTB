@@ -1,7 +1,65 @@
 # Unidad 3
 
 ## Bitácora de proceso de aprendizaje
+### Actividad 3 
 
+Fricción
+<img width="600" height="382" alt="image" src="https://github.com/user-attachments/assets/30bea7c1-783c-44b5-979a-b1ce52fd4500" />
+
+
+        // Obra 1: Fricción - El rastro del cansancio
+        let movers = [];
+        let mu = 0.1; // Coeficiente de fricción
+        
+        function setup() {
+          createCanvas(600, 400);
+          background(255);
+          for (let i = 0; i < 10; i++) {
+            movers[i] = new Mover(0, random(height), random(1, 5));
+            movers[i].vel = createVector(random(5, 15), 0); // Velocidad inicial
+          }
+        }
+        
+        function draw() {
+          for (let m of movers) {
+            // Calcular Fricción
+            let friction = m.vel.copy();
+            friction.normalize();
+            friction.mult(-1);
+            let normal1 = 1; 
+            friction.setMag(mu * normal1);
+            
+            m.applyForce(friction);
+            m.update();
+            m.display();
+          }
+        }
+        
+        class Mover {
+          constructor(x, y, m) {
+            this.pos = createVector(x, y);
+            this.vel = createVector(0, 0);
+            this.acc = createVector(0, 0);
+            this.mass = m;
+          }
+          applyForce(f) {
+            let force = p5.Vector.div(f, this.mass);
+            this.acc.add(force);
+          }
+          update() {
+            this.vel.add(this.acc);
+            this.pos.add(this.vel);
+            this.acc.mult(0);
+          }
+          display() {
+            stroke(0, 50);
+            fill(0, 10);
+            circle(this.pos.x, this.pos.y, this.mass * 4);
+          }
+        }
+Resistencia de fluidos
+
+Atraccion gravitacional
 
 ## Bitácora de aplicación 
 
@@ -228,3 +286,4 @@ https://editor.p5js.org/SaloTB/sketches/T66rBfnpZ
     }
 
 ## Bitácora de reflexión
+
