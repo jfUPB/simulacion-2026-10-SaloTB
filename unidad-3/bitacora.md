@@ -3,11 +3,11 @@
 ## Bitácora de proceso de aprendizaje
 ### Actividad 3 
 
-Fricción
+#### Fricción
 
 <img width="600" height="382" alt="image" src="https://github.com/user-attachments/assets/30bea7c1-783c-44b5-979a-b1ce52fd4500" />
 
-
+```javascript
         // Obra 1: Fricción - El rastro del cansancio
         let movers = [];
         let mu = 0.1; // Coeficiente de fricción
@@ -58,10 +58,13 @@ Fricción
             circle(this.pos.x, this.pos.y, this.mass * 4);
           }
         }
-Resistencia de fluidos
+```
+
+#### Resistencia de fluidos
 
 <img width="633" height="398" alt="image" src="https://github.com/user-attachments/assets/22efde19-7cd3-4d8a-8d38-17b2185da418" />
 
+```javascript
         let movers = [];
         let liquids = []; // Ahora es un arreglo para tener 4
         
@@ -196,11 +199,13 @@ Resistencia de fluidos
             text("Drag: " + this.c, this.x + this.w/2, height - 10);
           }
         }
+```
 
-Atraccion gravitacional
+#### Atraccion gravitacional
 
 <img width="595" height="597" alt="image" src="https://github.com/user-attachments/assets/16843521-5dc2-415c-9b67-0c51abed19cf" />
 
+```javascript
         let movers = [];
         let attractors = [];
         let G = 1; // Constante de gravedad
@@ -315,14 +320,16 @@ Atraccion gravitacional
             ellipse(this.pos.x, this.pos.y, this.mass * 6);
           }
         }
+```
 
 ## Bitácora de aplicación 
 
-Esta obra gnerativa busca simular un ecosistema donde cada una de las particulas tiene una funcion en su "sociedad", estan las esferas azules que se encargan de recolectar esferas moradas, los cuadrados rojos que son quienes protegen los alrededores y se encargan de eliminar las esferas naranjas que buscan causar caos sobre el orden establecido por las otras esferas. Este ecosistema esta creado a partir de diferentes reglas, ente ellas la fuerza de gravedad que limita el movimeinto de las esferas naranjas quienes caen ante la interacción del usuario y causan un caos lineal. La otra fuerza más notoria es la de la atraccion y repulsion por la que todas las esferas son afectadas, el ejemplo más claro de esto son las esferas moradas quienes son atraidas por las azules y las naranjas y ademas expulsadas por las rojas. Fuera de estas fuerzas se utilizan ls principios de movimiento a tavez del cambio en la aceleracion (por parte de las azules que se mueven aleatoriamente) 
+Esta obra gnerativa busca simular un ecosistema donde cada una de las particulas tiene una funcion en su "sociedad", estan las esferas azules que se encargan de recolectar esferas moradas, los cuadrados rojos que son quienes protegen los alrededores y se encargan de eliminar las esferas naranjas que buscan causar caos sobre el orden establecido por las otras esferas. Este ecosistema esta creado a partir de diferentes reglas, ente ellas la fuerza de gravedad que limita el movimeinto de las esferas naranjas quienes caen ante la interacción del usuario y causan un caos lineal. La otra fuerza más notoria es la de la atraccion y repulsion por la que todas las esferas son afectadas, el ejemplo más claro de esto son las esferas moradas quienes son atraidas por las azules y las naranjas y ademas expulsadas por las rojas. Fuera de estas fuerzas se utilizan los principios de movimiento a tavez del cambio en la aceleracion (por parte de las azules que se mueven aleatoriamente) 
 
 https://editor.p5js.org/SaloTB/sketches/T66rBfnpZ 
 <img width="796" height="595" alt="image" src="https://github.com/user-attachments/assets/6b06d106-d342-406f-9c9a-5c38dd654183" />
 
+```javascript
     let particlesBlue = [];
     let particlesPurple = [];
     let particlesOrange = [];
@@ -539,6 +546,8 @@ https://editor.p5js.org/SaloTB/sketches/T66rBfnpZ
         rect(this.pos.x, this.pos.y, 30, 30);
       }
     }
+```
+
 
 ## Bitácora de reflexión
 
@@ -547,6 +556,137 @@ https://editor.p5js.org/SaloTB/sketches/T66rBfnpZ
 Motion 101: En motion 101 se trabaja el movimeinto, por ejemplo de una particula en base a un vector de movimiento que tiene dirección y magnitud, estos dos factores afectando que tanto se mueve el objeto y en que direccion se mueve. Ademas de esto se trabaja la aceleración que tiene la capacidad de alterar la velocidad y por concecuente la posición de la particula. 
 
 
+```javascript
+        let esferas = [];
+        let numEsferas = 4;
+        
+        function setup() {
+          createCanvas(windowWidth, windowHeight);
+          
+          // Paleta clásica de Calder
+          let colores = ["#DD0A1A", "#618AC4", "#F8B100", "#111111"];
+        
+          for (let i = 0; i < numEsferas; i++) {
+            let x = random(width * 0.3, width * 0.7);
+            let y = random(height * 0.3, height * 0.7);
+            let m = random(30, 60);
+            
+            // Gravedad única: cada pieza cae a una velocidad distinta
+            // Incluso algunas podrían tener gravedad negativa (flotar hacia arriba)
+            let gravPersonal = createVector(0, random(5, -6)); 
+            
+            esferas.push(new Esfera(x, y, m, color(colores[i]), gravPersonal));
+          }
+        }
+        
+        function draw() {
+          background(200, 200, 200); // Fondo color lienzo
+        
+          // 1. Conexiones (Atracción/Repulsión interna entre esferas)
+          // Conectamos en cadena: 0-1, 1-2, 2-3, 3-0
+          for (let i = 0; i < esferas.length; i++) {
+            let proxima = (i + 1) % esferas.length;
+            vincularEsferas(esferas[i], esferas[proxima]);
+          }
+        
+          for (let e of esferas) {
+            // 2. Aplicar Gravedad Propia
+            e.applyForce(e.gravedadPropia);
+        
+            // 3. REPELSIÓN DEL MOUSE (Interacción)
+            if (mouseIsPressed) {
+              let mousePos = createVector(mouseX, mouseY);
+              let fuerzaRepulsion = p5.Vector.sub(e.pos, mousePos); // Dirección: del mouse hacia la esfera
+              let distancia = fuerzaRepulsion.mag();
+              
+              // Solo aplicar si el mouse está relativamente cerca (opcional, para realismo)
+              if (distancia < 500) {
+                fuerzaRepulsion.normalize();
+                // Cuanto más cerca, más fuerte es el empujón (fuerza inversamente proporcional)
+                let potencia = 20; 
+                fuerzaRepulsion.mult(potencia);
+                e.applyForce(fuerzaRepulsion);
+              }
+            }
+        
+            // 4. Rozamiento (Fricción) para suavizar el movimiento
+            let friccion = e.vel.copy();
+            friccion.mult(-0.08);
+            e.applyForce(friccion);
+        
+            e.update();
+            e.display();
+          }
+        
+          // Dibujar las líneas de conexión "alambres"
+          dibujarAlambres();
+        }
+        
+        // Función para crear la tensión del hilo (Hooke's Law simplificado)
+        function vincularEsferas(a, b) {
+          let fuerza = p5.Vector.sub(b.pos, a.pos);
+          let distanciaActual = fuerza.mag();
+          let distanciaDeseada = 250; // Longitud del alambre
+          
+          let diferencia = distanciaActual - distanciaDeseada;
+          
+          // Fuerza de resorte
+          fuerza.normalize();
+          fuerza.mult(diferencia * 0.05); 
+          
+          a.applyForce(fuerza);
+          b.applyForce(fuerza.mult(-1));
+        }
+        
+        function dibujarAlambres() {
+          stroke(0);
+          strokeWeight(1.5);
+          noFill();
+          beginShape();
+          for (let e of esferas) {
+            vertex(e.pos.x, e.pos.y);
+          }
+          endShape(CLOSE);
+        }
+        
+        class Esfera {
+          constructor(x, y, m, col, grav) {
+            this.pos = createVector(x, y);
+            this.vel = createVector(0, 0);
+            this.acc = createVector(0, 0);
+            this.masa = m;
+            this.color = col;
+            this.gravedadPropia = grav;
+          }
+        
+          applyForce(f) {
+            // A = F / M
+            let fuerza = p5.Vector.div(f, this.masa);
+            this.acc.add(fuerza);
+          }
+        
+          update() {
+            this.vel.add(this.acc);
+            this.pos.add(this.vel);
+            this.acc.mult(0);
+            
+            // Bordes: Rebotar sutilmente
+            if (this.pos.x < 0 || this.pos.x > width) this.vel.x *= -0.5;
+            if (this.pos.y < 0 || this.pos.y > height) this.vel.y *= -0.5;
+          }
+        
+          display() {
+            // Dibujar la masa
+            noStroke();
+            fill(this.color);
+            ellipse(this.pos.x, this.pos.y, this.masa, this.masa);
+            
+            // Detalle estético central (estilo Calder)
+            fill(0);
+            ellipse(this.pos.x, this.pos.y, 4, 4);
+          }
+        }
 
+```
 
-
+<img width="926" height="798" alt="image" src="https://github.com/user-attachments/assets/699052b1-b51d-4cf1-a3c7-d44bf4fde71a" />
