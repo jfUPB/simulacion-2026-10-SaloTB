@@ -4,6 +4,7 @@
 ### Actividad 3 
 
 Fricción
+
 <img width="600" height="382" alt="image" src="https://github.com/user-attachments/assets/30bea7c1-783c-44b5-979a-b1ce52fd4500" />
 
 
@@ -59,7 +60,261 @@ Fricción
         }
 Resistencia de fluidos
 
+<img width="633" height="398" alt="image" src="https://github.com/user-attachments/assets/22efde19-7cd3-4d8a-8d38-17b2185da418" />
+
+        let movers = [];
+        let liquids = []; // Ahora es un arreglo para tener 4
+        
+        function setup() {
+          createCanvas(640, 400);
+          reset();
+        
+          // Creamos 4 líquidos con diferentes densidades (coeficientes) y colores
+          // Liquid(x, y, ancho, alto, coeficiente de arrastre, color)
+          let w = width / 4;
+          liquids[0] = new Liquid(0, 0, w, height, 0.05, color(200, 255, 255, 100));     // Aire (muy suave)
+          liquids[1] = new Liquid(w, 0, w, height, 0.1, color(100, 200, 255, 150));    // Agua (medio)
+          liquids[2] = new Liquid(w * 2, 0, w, height, 0.25, color(50, 100, 255, 180)); // Aceite (fuerte)
+          liquids[3] = new Liquid(w * 3, 0, w, height, 0.5, color(20, 50, 150, 200));   // Lodo (muy fuerte)
+        }
+        
+        function draw() {
+          background(255);
+        
+          // Dibujar los 4 líquidos
+          for (let l of liquids) {
+            l.show();
+          }
+        
+          for (let m of movers) {
+            // Revisar cada líquido para ver si la pelota está dentro
+            for (let l of liquids) {
+              if (l.contains(m)) {
+                let dragForce = l.calculateDrag(m);
+                m.applyForce(dragForce);
+              }
+            }
+        
+            // Gravedad escalada por masa
+            let gravity = createVector(0, 0.2 * m.mass);
+            m.applyForce(gravity);
+        
+            m.update();
+            m.show();
+            m.checkEdges();
+          }
+        }
+        
+        function mousePressed() {
+          reset();
+        }
+        
+        function reset() {
+          movers = [];
+          for (let i = 0; i < 9; i++) {
+            // Posición inicial aleatoria en la parte superior
+            movers[i] = new Mover(random(width), 20, random(1, 4));
+          }
+        }
+        
+        // --- CLASE MOVER ---
+        class Mover {
+          constructor(x, y, mass) {
+            this.mass = mass;
+            this.radius = mass * 8;
+            this.position = createVector(x, y);
+            this.velocity = createVector(0, 0);
+            this.acceleration = createVector(0, 0);
+            // COLOR ALEATORIO para cada esfera
+            this.color = color(random(255), random(255), random(255));
+          }
+        
+          applyForce(force) {
+            let f = p5.Vector.div(force, this.mass);
+            this.acceleration.add(f);
+          }
+        
+          update() {
+            this.velocity.add(this.acceleration);
+            this.position.add(this.velocity);
+            this.acceleration.mult(0);
+          }
+        
+          show() {
+            stroke(0);
+            strokeWeight(2);
+            fill(this.color); // Usar el color asignado
+            circle(this.position.x, this.position.y, this.radius * 2);
+          }
+        
+          checkEdges() {
+            if (this.position.y > height - this.radius) {
+              this.velocity.y *= -0.9;
+              this.position.y = height - this.radius;
+            }
+          }
+        }
+        
+        // --- CLASE LIQUID (Fluido) ---
+        class Liquid {
+          constructor(x, y, w, h, c, col) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.c = c;   // Coeficiente de arrastre
+            this.col = col; // Color del fluido
+          }
+        
+          contains(m) {
+            let p = m.position;
+            return p.x > this.x && p.x < this.x + this.w &&
+                   p.y > this.y && p.y < this.y + this.h;
+          }
+        
+          calculateDrag(m) {
+            // Magnitud es el coeficiente * velocidad al cuadrado
+            let speed = m.velocity.mag();
+            let dragMagnitude = this.c * speed * speed;
+        
+            // Dirección es opuesta a la velocidad
+            let dragForce = m.velocity.copy();
+            dragForce.mult(-1);
+            dragForce.normalize();
+            dragForce.mult(dragMagnitude);
+            return dragForce;
+          }
+        
+          show() {
+            noStroke();
+            fill(this.col);
+            rect(this.x, this.y, this.w, this.h);
+            
+            // Etiqueta de texto para identificar la fuerza
+            fill(0, 100);
+            textAlign(CENTER);
+            text("Drag: " + this.c, this.x + this.w/2, height - 10);
+          }
+        }
+
 Atraccion gravitacional
+
+<img width="595" height="597" alt="image" src="https://github.com/user-attachments/assets/16843521-5dc2-415c-9b67-0c51abed19cf" />
+
+        let movers = [];
+        let attractors = [];
+        let G = 1; // Constante de gravedad
+        
+        function setup() {
+          createCanvas(600, 600);
+          
+          // 1. Creamos las 3 esferas grandes (Attractors)
+          // Posiciones: Arriba centro, abajo izquierda y abajo derecha
+          attractors.push(new Attractor(width / 2, 80, 40, color(255, 204, 0))); // Arriba
+          attractors.push(new Attractor(100, height - 80, 40, color(255, 100, 0))); // Izquierda
+          attractors.push(new Attractor(width - 100, height - 80, 40, color(255, 100, 0))); // Derecha
+        
+          // 2. Creamos muchas esferas pequeñas en el centro
+          for (let i = 0; i < 40; i++) {
+            movers.push(new Mover(width / 2 + random(-20, 20), height / 2 + random(-20, 20), random(1, 3)));
+          }
+        }
+        
+        function draw() {
+          background(20, 20, 30);
+        
+          // Dibujar los atractores
+          for (let a of attractors) {
+            a.show();
+          }
+        
+          for (let m of movers) {
+            // A. Atracción hacia las 3 esferas grandes
+            for (let a of attractors) {
+              let force = a.calculateAttraction(m);
+              m.applyForce(force);
+            }
+        
+            // B. Repulsión entre esferas pequeñas (se repelen a sí mismas)
+            for (let other of movers) {
+              if (m !== other) {
+                let repulsion = m.calculateRepulsion(other);
+                m.applyForce(repulsion);
+              }
+            }
+        
+            m.update();
+            m.show();
+          }
+        }
+        
+        // --- CLASE ATRACTOR (Esferas Grandes) ---
+        class Attractor {
+          constructor(x, y, m, col) {
+            this.pos = createVector(x, y);
+            this.mass = m;
+            this.col = col;
+          }
+        
+          calculateAttraction(mover) {
+            let force = p5.Vector.sub(this.pos, mover.pos); // Dirección
+            let distance = constrain(force.mag(), 5, 50);  // Limitar distancia para evitar fuerzas infinitas
+            force.normalize();
+            let strength = (G * this.mass * mover.mass) / (distance * distance); // Fórmula de Newton
+            force.mult(strength);
+            return force;
+          }
+        
+          show() {
+            noStroke();
+            fill(this.col);
+            ellipse(this.pos.x, this.pos.y, this.mass * 2);
+          }
+        }
+        
+        // --- CLASE MOVER (Esferas Pequeñas) ---
+        class Mover {
+          constructor(x, y, m) {
+            this.pos = createVector(x, y);
+            this.vel = p5.Vector.random2D(); // Inician con un poco de movimiento
+            this.acc = createVector(0, 0);
+            this.mass = m;
+            this.color = color(0, 255, 255, 150);
+          }
+        
+          applyForce(force) {
+            let f = p5.Vector.div(force, this.mass);
+            this.acc.add(f);
+          }
+        
+          // Fuerza de repulsión: igual a la gravedad pero en dirección opuesta
+          calculateRepulsion(other) {
+            let force = p5.Vector.sub(this.pos, other.pos); // Dirección hacia afuera
+            let distance = force.mag();
+            
+            if (distance < 40) { // Solo se repelen si están cerca
+              force.normalize();
+              let strength = (G * this.mass * other.mass) / (distance * distance);
+              force.mult(strength * 0.5); // Ajustar intensidad de repulsión
+              return force;
+            } else {
+              return createVector(0, 0);
+            }
+          }
+        
+          update() {
+            this.vel.add(this.acc);
+            this.vel.limit(4); // Evitar que salgan disparadas demasiado rápido
+            this.pos.add(this.vel);
+            this.acc.mult(0);
+          }
+        
+          show() {
+            noStroke();
+            fill(this.color);
+            ellipse(this.pos.x, this.pos.y, this.mass * 6);
+          }
+        }
 
 ## Bitácora de aplicación 
 
@@ -286,4 +541,12 @@ https://editor.p5js.org/SaloTB/sketches/T66rBfnpZ
     }
 
 ## Bitácora de reflexión
+
+### Actividad 5
+
+Motion 101: En motion 101 se trabaja el movimeinto, por ejemplo de una particula en base a un vector de movimiento que tiene dirección y magnitud, estos dos factores afectando que tanto se mueve el objeto y en que direccion se mueve. Ademas de esto se trabaja la aceleración que tiene la capacidad de alterar la velocidad y por concecuente la posición de la particula. 
+
+
+
+
 
