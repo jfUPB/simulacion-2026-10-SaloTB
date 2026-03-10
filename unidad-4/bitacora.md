@@ -8,7 +8,7 @@ https://editor.p5js.org/SaloTB/sketches/yAEhJG3q9
 <img width="794" height="591" alt="image" src="https://github.com/user-attachments/assets/62b7f6e5-5eac-4d14-a24f-307111828a9b" />
 
 
-´´´js
+```javascript
 /**
  * Nature of Code: Depredadores con Doble Campo de Fuerza
  * Núcleo: Atracción extrema (Comida) | Aura: Repulsión (Miedo)
@@ -248,6 +248,7 @@ class Particula {
   }
 }
 
-´´´
+```
 
 ## Bitácora de reflexión
+
