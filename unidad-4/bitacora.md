@@ -7,6 +7,7 @@
 https://editor.p5js.org/SaloTB/sketches/yAEhJG3q9
 <img width="794" height="591" alt="image" src="https://github.com/user-attachments/assets/62b7f6e5-5eac-4d14-a24f-307111828a9b" />
 
+el concepto de esta obra generativa es el de una relacion presa - depredador. Donde las esferaz en lso bordes del canvas son los depredadores que saltan de forma inesperada para tomar a las prezas que viven en su propio mundo con sus propias complicaciones, como los pequeños puntos naranjas que molestan al resto de pequeñas "criaturas" que tan solo quieren reencontrarse entre sus propias "camadas". Tambien esta la libertad del usuario de ser un depredador el por su cuenta y afectar la vida de estas pequeños circulos o incluso arrebatrselos a otros depredadores. 
 
 ```javascript
 /**
@@ -252,3 +253,7 @@ class Particula {
 
 ## Bitácora de reflexión
 
+Diagrama conceptual:
+https://excalidraw.com/#json=ssP3zrdZYzHe-OtN1Thm-,EBT43_3lGeD16mRwo1JLew 
+
+Aplicación a mi perfil profecional: como ingeniera en diseño de entretenimeinto digital  en el enfasis de animación estos conocimeintos pueden ser aplicados a la creación de efectos visuales para peliculas en houdini y entender mejor y a fondo como funcionan estos fenomenos fisicos para crear experiencias inovadoras desde la creación de particulas en programas como blender. 
