@@ -40,13 +40,21 @@ Hay un Array de emitters en el 4.4.
 
 ## Bitácora de aplicación 
 
-En este sistema de particulas se ejemplifica de forma explicita, el nacimeinot, la vida y la muerte de las "ideas" o "historias". Estas nacen de personas o en el caso de este sistema en particular de libros abiertos, quienes acumulan estas ideas para que finalmente viajen por el espacio para tocar a otros libros abierts o incluso libros cerrados, cuando se toca a otros libros abiertoas estas "nuevas ideas2 junto con las qu este libro ya poseia se convierten en ideas nuevas represnetadas pro aprticulas de un color dferente; por otro lado cuando estas ideas llegan con libros cerrados los convierten en libros abiertos que comeinzan a producir ideas. Para este sistema de aprticulas tambien se tiene una interacción del usuario donde este podra tomar el rol de la institucionalización del arte y las historias, en otras palabras actuando como uan censura para las ideas. Esta interacción ccrea un campo de atraccion, "robando" las ideas a su alrededor para convertirlas en armas en contra de aquellos msimos quienes crearon las ideas. El proposito de este trabajo es que el usuario se de cuenta de lo dificil que es eliminar el poder de las historias y su influencia en su entorno cuando está lo sufcientemente esparcido, pero al msimo tiempo lo peligrosa que puede ser la censura en una sociedad aislada de nuevas ideas. 
+En este sistema de particulas se ejemplifica de forma explicita, el nacimeinot, la vida y la muerte de las "ideas" o "historias". Estas nacen de personas o en el caso de este sistema en particular de libros abiertos, quienes acumulan estas ideas para que finalmente viajen por el espacio para tocar a otros libros abierts o incluso libros cerrados, cuando se toca a otros libros abiertoas estas "nuevas ideas junto con las qu este libro ya poseia se convierten en ideas nuevas represnetadas por aprticulas de un color dferente; por otro lado cuando estas ideas llegan con libros cerrados los convierten en libros abiertos que comeinzan a producir ideas. Para este sistema de aprticulas tambien se tiene una interacción del usuario donde este podra tomar el rol de la institucionalización del arte y las historias, en otras palabras actuando como uan censura para las ideas. Esta interacción ccrea un campo de atraccion, "robando" las ideas a su alrededor para convertirlas en armas en contra de aquellos msimos quienes crearon las ideas. El proposito de este trabajo es que el usuario se de cuenta de lo dificil que es eliminar el poder de las historias y su influencia en su entorno cuando está lo sufcientemente esparcido, pero al msimo tiempo lo peligrosa que puede ser la censura en una sociedad aislada de nuevas ideas. 
+
+Ciclo de vida de las particulas:
+1. Libros cerrados: estos mueren cuando una idea llega y nacen cuando una particula "censura" los toca o cuando no "piensan" en una idea durante 5 segundos
+2. Libros abiertos: Nacen cuando una idea les llega y mueren cuando una particula "Censura los toca" o cuando no "piensan" en una idea durante 5 segundos
+3. Censura: Nacen cuando el usuario recolecta cierta cantidad de "Ideas" y tienen una probabilidad de morir cuando son tocadas por ideas
+4. Ideas: Nacen de los libros abiertos y mueren tras cierto tiempo de existir (Se van desvaneciendo lentamente)
 
 <img width="908" height="775" alt="image" src="https://github.com/user-attachments/assets/b26f5a7e-acf5-4e0c-918b-63bdad5f8f95" />
 <img width="915" height="769" alt="image" src="https://github.com/user-attachments/assets/efa69ad0-3fc8-448f-8a48-6b5de600291e" />
 <img width="917" height="789" alt="image" src="https://github.com/user-attachments/assets/582ff85b-45d9-470a-af27-63a3130a70c2" />
 
 https://editor.p5js.org/SaloTB/sketches/1gKwpvFqj 
+
+```javascript
 
     let personas = [];
     let historias = [];
@@ -429,5 +437,26 @@ https://editor.p5js.org/SaloTB/sketches/1gKwpvFqj
       resizeCanvas(windowWidth, windowHeight);
     }
 
-
+```
 ## Bitácora de reflexión
+
+### Una partícula es una entidad con estado.
+Esto significa que es un elemento que tiene guardado en si mismo varias cualidades como la posicion, la velocidad o la aceleración, el color, el tamaño...etc. No es simplemente un dibujo en la pantalla. 
+### Una partícula tiene ciclo de vida.
+Las particulas para eviatr la saturación de la meoria tiene un Lifespan, lo que permite que la particula tenga un nacimeinto y una muerte dentro del programa. Esta muerte para cumplir su proposito debe de ser eliminada completamente de la memoria, no uncimaente desaparecer de la pantalla.
+### Un sistema de partículas gestiona colecciones dinámicas de elementos.
+Es una forma de "pasar lista" de las particulas permitiendo que se dibujen y actualicen.
+### La creación y eliminación de partículas no es un detalle técnico menor, sino parte central del modelo.
+Estó es mas por el lado de la narrativa y el como cada elmento tiene un ciclo de vida que esta relacionado consigo mismo y ocn el entorno.
+### Debe haber separación entre la lógica de una partícula individual y la lógica del sistema/emisor.
+Cada particula sabe sus caracteristicas, pero el emisor tiene un concimeinto más general, osea cantidad de particulas, sin necesariamente saber como funcionan, esto aydua a poder hacer cambios sin dañar la logica y a trabajar en equipos de varios programadores. 
+### Un emisor o particle system es una abstracción importante.
+Ayuda a que no se tengan que mover las particulas individualmente sino que se puedan mover todas desde una base.
+### Pueden existir sistemas de sistemas.
+esto es gracias a la herencia, donde un sistema de particulas podria lanza otro sistema de particulas, en mi caso una particula "libro abierto" que lanza una particula "idea"
+### Puede haber heterogeneidad usando herencia y polimorfismo.
+Cone sta logica se pueden tener particulas diferentes que compartan elementos de la misma logica lo que permite mayor variedad sin tener que reescribir el codigo base para todas. 
+### Las partículas pueden responder a fuerzas globales y locales.
+En esta logica o este "mundo de particulas" como en el mundo real, existen fuerzas propias o fuerzas externas que se apliucan a su entorno para generar las interacciones.
+### La representación visual puede variar sin cambiar el principio algorítmico de fondo.
+Esto viene desde la base del arte generativo, nosotros solo establecemos las reglas base, pero el sistema, cada vez que se ejecuta, sera de una forma completamente diferente haciendo que las visuales sean unicas cada vez. 
