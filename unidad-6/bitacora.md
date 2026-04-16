@@ -33,17 +33,25 @@ ventajas y limitaciones de cada uno.
 
 https://editor.p5js.org/SaloTB/sketches/BPncqGIVc 
 
-Referencias visuales:
+#### Referencias visuales:
+
 <img width="736" height="1048" alt="descargar (12)" src="https://github.com/user-attachments/assets/b0c94ea5-7c6a-4584-ae59-ad2494857dab" />
 <img width="736" height="965" alt="omori" src="https://github.com/user-attachments/assets/4de3d0a7-3023-40c5-9af2-d8b156caf074" />
 <img width="736" height="736" alt="descargar (11)" src="https://github.com/user-attachments/assets/fc4f932d-a842-4f3c-b8e9-ed22fda45224" />
 
-Proceso de conceptualizacion: 
+#### Proceso de conceptualizacion: 
+
 <img width="975" height="1600" alt="WhatsApp Image 2026-04-15 at 10 07 12 PM" src="https://github.com/user-attachments/assets/50ac6cb1-65e2-4166-a8a2-8b5ae70b69f8" />
 
 <img width="1080" height="1403" alt="WhatsApp Image 2026-04-15 at 10 07 11 PM" src="https://github.com/user-attachments/assets/caf26ac2-cb55-4378-b84c-f42de6f2dba6" />
 
-Prompt:
+#### Mapa de decisiones e interpretación
+
+<img width="1024" height="768" alt="Purple and Green Minimalist Color Blocks Concept Map Chart" src="https://github.com/user-attachments/assets/5d93acce-7507-4a8d-99a8-6f177dd1661f" />
+
+#### Uso de IA
+
+Se utilizo inteligencia artificial para la creación del codigo de este proyecto, el pomt que primeramente fue utilizado es el siguiente:
 
 Crea el codigo para una obra generativa audioreactiva basada en "The nature of code" hasta el capitulo de autonomus agents. A continuación pondre las acracteristicas que debe de tener esta obra generativa:
 
@@ -55,6 +63,9 @@ Campo de Flujo: Este es inviisble y tiene 4 cambios que se van aplicando dependi
 
 Cancion a utilizar: My time del juego Omori
 
+Se añadieron otros pormts posteriores para arreglos que se consideraron necesarios, y finalmente se hciieron cmabios manuales apra obtener el resultado querido.
+
+```javascript
 
     let song;
     let fft;
@@ -330,6 +341,7 @@ Cancion a utilizar: My time del juego Omori
         song.play();
         started = true;
       }
+```
     }
 
 ## Bitácora de reflexión
