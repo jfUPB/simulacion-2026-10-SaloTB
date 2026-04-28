@@ -52,5 +52,11 @@ Me inetresa utilizar:
 
 ## Bitácora de aplicación 
 
+Palabra elegida: Inefable
+
+Elegi está palabra pues es la representación de todo aquello que es inexplicable y por tanto visualmente se puede representar de todas las maneras posibles de forma que se confunda el sentido de si misma. Una vista inexplicable ademas se transmite usualmente en los sueños que se traduce despues a las pinturas surrealistas de muchos artistas.
+
+https://editor.p5js.org/SaloTB/sketches/McHToRAV_ 
+
 
 ## Bitácora de reflexión
