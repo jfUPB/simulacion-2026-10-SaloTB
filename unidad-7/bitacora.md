@@ -56,7 +56,327 @@ Palabra elegida: Inefable
 
 Elegi está palabra pues es la representación de todo aquello que es inexplicable y por tanto visualmente se puede representar de todas las maneras posibles de forma que se confunda el sentido de si misma. Una vista inexplicable ademas se transmite usualmente en los sueños que se traduce despues a las pinturas surrealistas de muchos artistas.
 
+
+
 https://editor.p5js.org/SaloTB/sketches/McHToRAV_ 
 
+```javascript
+
+// --- CONFIGURACIÓN DE MATTER.JS ---
+const { Engine, World, Bodies, Constraint, Body } = Matter;
+let engine, world;
+
+// --- VARIABLES ---
+let agents = [];
+let word = "I N E F A B L E";
+let font;
+let spheres = [];
+let pendulums = []; 
+let fft, amplitude;
+let song;
+let started = false;
+let currentHue = 0;
+let prevCentroid = 0; // Para detectar saltos de pitch
+
+function preload() {
+  font = loadFont('https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf');
+  song = loadSound('paganini.mp3'); 
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  colorMode(HSB, 360, 100, 100, 100); 
+  noCursor(); 
+
+  engine = Engine.create();
+  world = engine.world;
+  world.gravity.y = 0.5;
+
+  initWordPoints();
+
+  fft = new p5.FFT();
+  amplitude = new p5.Amplitude();
+}
+
+function initWordPoints() {
+  agents = [];
+  let fontSize = width * 0.12;
+  let bounds = font.textBounds(word, 0, 0, fontSize);
+  let pts = font.textToPoints(word, width/2 - bounds.w/2, height/2 + bounds.h/2, fontSize, {
+    sampleFactor: 0.18
+  });
+
+  for (let p of pts) {
+    agents.push(new Agent(p.x, p.y));
+  }
+}
+
+function draw() {
+  background(0, 0, 95); 
+
+  if (!started) {
+    drawStartScreen();
+    return;
+  }
+
+  Engine.update(engine);
+
+  // 1. ANÁLISIS DE AUDIO AVANZADO
+  fft.analyze();
+  let vol = amplitude.getLevel();
+  let centroid = fft.getCentroid();
+  let treble = fft.getEnergy("treble");
+
+  // Detección de salto de Pitch (Punto 1)
+ 
+  let pitchJump = centroid - prevCentroid;
+  if (pitchJump > 600 || (centroid > 5500 && frameCount % 60 == 0)) {
+    spawnPendulum();
+  }
+  prevCentroid = centroid;
+
+  currentHue = lerp(currentHue, map(centroid, 1000, 7000, 0, 360), 0.8);
+
+  // 2. ACTUALIZAR ELEMENTOS FÍSICOS
+  drawSpheres();
+  updateAndDrawPendulums(vol);
+
+  // 3. ACTUALIZAR AGENTES
+  for (let a of agents) {
+    a.behaviors(vol, treble, currentHue, pendulums); 
+    a.update();
+    a.show(vol);
+  }
+
+  drawCustomCursor(vol, currentHue);
+}
+
+// --- SISTEMA DE PÉNDULO CON RETRACCIÓN (Punto 2) ---
+function spawnPendulum() {
+  // Solo permitimos 3 péndulos a la vez para no saturar
+  if (pendulums.length > 4) return;
+
+  let anchorX = random(width);
+  let anchorPos = { x: anchorX, y: -20 };
+  
+  let ball = Bodies.circle(anchorX + random(-100, 100), 100, 50, {
+    restitution: 0.8,
+    density: 0.08,
+    frictionAir: 0.005
+  });
+
+  let targetLen = random(200, height * 0.7);
+  let constraint = Constraint.create({
+    pointA: anchorPos,
+    bodyB: ball,
+    length: targetLen,
+    stiffness: 0.04
+  });
+
+  let pObj = { 
+    ball, 
+    constraint, 
+    timer: 180, // 3 segundos activo
+    hue: currentHue, 
+    state: "ACTIVE",
+    originalLen: targetLen
+  };
+  
+  pendulums.push(pObj);
+  World.add(world, [ball, constraint]);
+}
+
+function updateAndDrawPendulums(vol) {
+  for (let i = pendulums.length - 1; i >= 0; i--) {
+    let p = pendulums[i];
+    let posB = p.ball.position;
+    let posA = p.constraint.pointA;
+
+    // Balanceo rítmico
+    let swing = map(vol, 0, 0.5, 0, 1.2);
+    Body.applyForce(p.ball, p.ball.position, { x: swing * cos(frameCount * 0.15), y: 0 });
+
+    // Lógica de Retracción (Punto 2)
+    if (p.timer > 0) {
+      p.timer--;
+    } else {
+      p.state = "RETRACTING";
+      // El hilo se acorta agresivamente
+      p.constraint.length = lerp(p.constraint.length, 0, 0.08);
+      // El anclaje sube para sacarlo de escena
+      p.constraint.pointA.y -= 5;
+    }
+
+    // Dibujo
+    stroke(p.hue, 30, 60, 40);
+    strokeWeight(2);
+    line(posA.x, posA.y, posB.x, posB.y);
+    
+    noStroke();
+    fill(p.hue, 20, 80, 60);
+    ellipse(posB.x, posB.y, 80);
+
+    // Eliminar cuando se ha retraído totalmente
+    if (p.state === "RETRACTING" && p.constraint.length < 5) {
+      World.remove(world, [p.ball, p.constraint]);
+      pendulums.splice(i, 1);
+    }
+  }
+}
+
+// --- CLASE AGENTE CON VIBRACIÓN INDIVIDUAL ---
+class Agent {
+  constructor(tx, ty) {
+    this.target = createVector(tx, ty);
+    this.pos = createVector(random(width), random(height));
+    this.vel = createVector(random(-3, 3), random(-3, 3));
+    this.acc = createVector();
+    this.maxSpeedBase = 5;
+    this.maxForce = 0.45;
+    this.size = random(4, 10);
+    this.baseSize = this.size;
+    this.shapeType = floor(random(3));
+    this.lockTimer = 0;
+    this.jitterFactor = random(0.8, 6.0); // Niveles de "locura"
+  }
+
+  behaviors(vol, energy, h, pends) {
+    this.maxSpeed = map(vol, 0, 0.5, this.maxSpeedBase, this.maxSpeedBase * 9);
+    this.h = h;
+
+    // Revelado por Mouse
+    if (dist(mouseX, mouseY, this.pos.x, this.pos.y) < 110) {
+      this.lockTimer = 60 * 7; 
+    }
+
+    if (this.lockTimer > 0) {
+      this.applyForce(this.arrive(this.target));
+      this.size = lerp(this.size, this.baseSize * 2.2, 0.2);
+      this.lockTimer--;
+    } else {
+      this.applyForce(this.wander());
+      let water = createVector(sin(frameCount * 0.05 + this.pos.y * 0.02), 0);
+      water.mult(map(energy, 0, 255, 1, 5));
+      this.applyForce(water);
+      this.size = lerp(this.size, this.baseSize, 0.1);
+    }
+
+    // REPELENTE DE PÉNDULO (Potente)
+    for (let p of pends) {
+      let d = dist(this.pos.x, this.pos.y, p.ball.position.x, p.ball.position.y);
+      if (d < 300) {
+        let repel = p5.Vector.sub(this.pos, createVector(p.ball.position.x, p.ball.position.y));
+        let strength = map(d, 0, 300, 15, 0); 
+        repel.setMag(strength);
+        this.applyForce(repel);
+        this.lockTimer = 0; 
+      }
+    }
+  }
+
+  applyForce(f) { this.acc.add(f); }
+
+  update() {
+    this.vel.add(this.acc);
+    this.vel.limit(this.maxSpeed);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+    
+    // Bordes infinitos
+    if (this.pos.x > width) this.pos.x = 0;
+    if (this.pos.x < 0) this.pos.x = width;
+    if (this.pos.y > height) this.pos.y = 0;
+    if (this.pos.y < 0) this.pos.y = height;
+  }
+
+  arrive(t) {
+    let desired = p5.Vector.sub(t, this.pos);
+    let d = desired.mag();
+    let s = (d < 100) ? map(d, 0, 100, 0, this.maxSpeed) : this.maxSpeed;
+    desired.setMag(s);
+    let steer = p5.Vector.sub(desired, this.vel);
+    steer.limit(this.maxForce * 2);
+    return steer;
+  }
+
+  wander() {
+    let angle = noise(this.pos.x * 0.01, this.pos.y * 0.01, frameCount * 0.02) * TWO_PI * 4;
+    return p5.Vector.fromAngle(angle).mult(0.6);
+  }
+
+  show(vol) {
+    let s = (this.lockTimer > 0) ? 100 : 50;
+    let b = (this.lockTimer > 0) ? 40 : 85;
+    
+    // Vibración individual musico-reactiva
+    let vX = random(-1, 1) * this.jitterFactor * vol * 12;
+    let vY = random(-1, 1) * this.jitterFactor * vol * 12;
+
+    fill(this.h, s, b, 90);
+    noStroke();
+    push();
+    translate(this.pos.x + vX, this.pos.y + vY);
+    if (this.shapeType === 0) rect(0, 0, this.size, this.size);
+    else if (this.shapeType === 1) ellipse(0, 0, this.size);
+    else triangle(-this.size/2, this.size/2, 0, -this.size/2, this.size/2, this.size/2);
+    pop();
+  }
+}
+
+// --- INTERFAZ Y AUXILIARES ---
+function mousePressed() {
+  if (!started) {
+    userStartAudio();
+    song.play();
+    fullscreen(true);
+    started = true;
+  }
+}
+
+function drawStartScreen() {
+  textAlign(CENTER);
+  fill(0, 0, 20);
+  textSize(24);
+  text("PAGANINI: INEFABLE", width/2, height/2 - 20);
+  textSize(12);
+  text("PULSA PARA PANTALLA COMPLETA", width/2, height/2 + 20);
+}
+
+function drawCustomCursor(vol, h) {
+  push();
+  translate(mouseX, mouseY);
+  rotate(frameCount * 0.1);
+  noFill();
+  stroke(h, 100, 50);
+  strokeWeight(3);
+  let p = map(vol, 0, 0.5, 30, 90);
+  triangle(-p/2, p/2, 0, -p/2, p/2, p/2);
+  pop();
+}
+
+function spawnSphere() {
+  let s = Bodies.circle(random(width), -50, 20, { restitution: 0.7 });
+  spheres.push(s);
+  World.add(world, s);
+}
+
+function drawSpheres() {
+  fill(0, 0, 10, 10);
+  for (let i = spheres.length - 1; i >= 0; i--) {
+    let s = spheres[i];
+    ellipse(s.position.x, s.position.y, 40);
+    if (s.position.y > height + 100) {
+      World.remove(world, s);
+      spheres.splice(i, 1);
+    }
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  initWordPoints();
+}
+
+```
 
 ## Bitácora de reflexión
