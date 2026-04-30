@@ -52,13 +52,21 @@ Me inetresa utilizar:
 
 ## Bitácora de aplicación 
 
+https://editor.p5js.org/SaloTB/sketches/McHToRAV_  
+
 Palabra elegida: Inefable
 
 Elegi está palabra pues es la representación de todo aquello que es inexplicable y por tanto visualmente se puede representar de todas las maneras posibles de forma que se confunda el sentido de si misma. Una vista inexplicable ademas se transmite usualmente en los sueños que se traduce despues a las pinturas surrealistas de muchos artistas.
 
 
 
-https://editor.p5js.org/SaloTB/sketches/McHToRAV_  
+<img width="1024" height="768" alt="Purple and Green Minimalist Color Blocks Concept Map Chart (1)" src="https://github.com/user-attachments/assets/53e62383-990b-4f56-a874-d83a42cd0a45" />
+
+
+<img width="736" height="920" alt="descargar (13)" src="https://github.com/user-attachments/assets/4816ff6f-70bf-475e-a7ea-3db2cd5519bb" />
+
+<img width="600" height="745" alt="Hallway  - Manuel Zapata" src="https://github.com/user-attachments/assets/1fa81986-2d62-4981-b963-822a1c0e7c03" />
+
 
 ```javascript
 
