@@ -20,6 +20,17 @@ Esta parte fuera de la simulation Zone es el rango estabelcido que es puesto des
 <img width="714" height="385" alt="image" src="https://github.com/user-attachments/assets/17054a9a-5965-46c6-8638-9fce3d6d2575" />
 En el output de la zona de simulción se ponen los objetos que se actualizaran con la información que sale de esta en cada frame al igual que una constante que permita determinar cual es su "frente" para la dirección del vector de movimiento
 
+Mapa de decisiones:
+<img width="1024" height="768" alt="Purple and Green Minimalist Color Blocks Concept Map Chart" src="https://github.com/user-attachments/assets/418cd494-5eb7-4fe2-92db-60d60863b6c5" />
+
+Video:
+https://github.com/user-attachments/assets/876fe034-eb0f-45d2-8407-f7e0f3dc0344
+
+
+
+
+
+
 
 
 
